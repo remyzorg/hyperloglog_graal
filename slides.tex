@@ -226,7 +226,36 @@ Maximum key/value number ($p' = 25$)
 \end{frame}
 
 
-\begin{frame}{Encoding hash values}
+
+
+%% ============================
+
+
+\begin{frame}{Conclusion}
+
+
+\begin{block}{Optimisations}
+\begin{itemize}
+\item Higher precision
+\item Compression
+\item Encoding hash values
+\end{itemize}
+\end{block}
+
+
+\begin{block}{Benefits}
+\begin{itemize}
+\item Smaller memory footprint
+\item Increased accuracy
+\item Larger high precision range 
+\end{itemize}
+\end{block}
+
+
+
+\end{frame}
+
+\begin{frame}{Conclusion : Space efficieny}
 
 
 \begin{figure}[c]
@@ -237,11 +266,16 @@ Maximum key/value number ($p' = 25$)
 
 \end{frame}
 
+\begin{frame}{Conclusion : Median relative error}
 
-%% ============================
+\begin{figure}[c]
+\includegraphics [scale=0.30]  {hll_fig5.png}
 
-\begin{frame}{Conclusion : Space efficiency}
+HLLnobias vs HLL++
+\end{figure}
+
 \end{frame}
+
 
 \end{document}
 
