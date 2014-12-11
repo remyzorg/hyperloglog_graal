@@ -79,16 +79,21 @@ Should use less memory for low cardinalities
 \begin{frame}{What sparse representation}
 
 
+\begin{minipage}{0.5\textwidth}%
 \begin{block}{Key/Value pairs}
 \begin{itemize}
 \item index as key
 \item $\varrho(w)$ as value
 \end{itemize}
 \end{block}
-
+\end{minipage}%
+\hfill%
+\begin{minipage}{0.5\textwidth}%
 \begin{figure}[c]
 \includegraphics [scale=0.5]  {hyperloglog_list.png}
 \end{figure}
+\end{minipage}%
+
 
 \begin{block}{Sparse representation}
 \begin{itemize}
