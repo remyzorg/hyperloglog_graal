@@ -163,6 +163,40 @@ TODO !
 \begin{frame}{Compressed sparsed representation}
 
 
+\begin{block}{Motivation}
+\begin{itemize}
+\item Memory efficiency for low cardinalities
+\item Use knowledge we have of the data structures
+\end{itemize}
+\end{block}
+
+
+\begin{block}{Data structures}
+\begin{itemize}
+\item Set buffer
+  \begin{itemize}
+  \item compact integers, low memory footprint
+  \end{itemize}
+\item Sorted list
+  \begin{itemize}
+  \item Variable length encoding
+  \item Difference encoding
+  \end{itemize}
+\end{itemize}
+\end{block}
+
+
+\end{frame}
+
+
+
+\begin{frame}{Difference encoding}
+
+\begin{figure}[c]
+\includegraphics [scale=0.7]  {hyperloglog_difference.png}
+\end{figure}
+
+
 \end{frame}
 
 
@@ -170,6 +204,9 @@ TODO !
 
 \begin{frame}{Encoding hash values}
 \end{frame}
+
+
+%% ============================
 
 \begin{frame}{Conclusion : Space efficiency}
 \end{frame}
