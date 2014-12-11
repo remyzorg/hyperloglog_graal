@@ -104,12 +104,15 @@ Should use less memory for low cardinalities
 \begin{frame}{What sparse representation}
 
 
-\begin{block}{Optimization : list buffer}
+\begin{block}{Optimization : bufferize insertions}
 \begin{itemize}
-\item Compact set of key/value integers
-\item Speed up insertions with an usorted list of values to insert
-\item Sort list, remove duplicates
-\item Merge the set and the list in linear time
+\item Compact sorted list of key/value integers
+\item Speed up insertions with a set of values to insert
+\item When the set reaches a maximum size
+\begin{itemize}
+\item Sort the set
+\item Merge with the sorted list (linear time)
+\end{itemize}
 \end{itemize}
 \end{block}
 
@@ -147,6 +150,8 @@ Higher precision is obtained by using more bits for the index.
 
 \begin{block}{Convert to dense representation}
 Sparse representation uses p' bits for the index, with $p' \ge p$
+
+TODO !
 \end{block}
 
 \end{frame}
@@ -156,6 +161,8 @@ Sparse representation uses p' bits for the index, with $p' \ge p$
 
 
 \begin{frame}{Compressed sparsed representation}
+
+
 \end{frame}
 
 
