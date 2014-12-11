@@ -221,26 +221,33 @@ Maximum key/value number
 \end{frame}
 
 %% ============================
-
-\begin{frame}{Encoding hash values}
-\end{frame}
-
-
 \begin{frame}{Encoding hash values}
 
+  We need a bigger encoding if we switch to the normal representation
+  and if $\langle x_{63}, \dots, x_{64-p\prime} \rangle$ are all 0.
+  ~\\
+  \colorbox{light-gray}{$\langle x_{63}, \dots, x_{64-p\prime} \rangle \| \langle \varrho (w\prime) \rangle \| \langle 1 \rangle $}
 
-\begin{figure}[c]
-\includegraphics [scale=0.45]  {sparse_all.png}
+  ~\\
+  In the other cases:
 
-Maximum key/value number
-\end{figure}
+  \colorbox{light-gray}{$\langle x_{63}, \dots, x_{64-p\prime} \rangle \| \langle 0 \rangle $}
 
+  ~\\
+  The gain of space on the hashed values increases precision ($p\prime)$
+  
 \end{frame}
 
 
 %% ============================
 
 \begin{frame}{Conclusion : Space efficiency}
+
+\begin{figure}[c]
+\includegraphics [scale=0.45]  {sparse_all.png}
+\caption{Maximum key/value number}
+\end{figure}
+  
 \end{frame}
 
 \end{document}
