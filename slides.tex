@@ -153,11 +153,14 @@ Higher precision is obtained by using more bits for the index.
 \begin{frame}{Higher precision}
 
 
-\begin{block}{Convert to dense representation}
-Sparse representation uses p' bits for the index, with $p' \ge p$
 
-TODO !
-\end{block}
+
+Sparse representation uses $p \prime$ bits for the index, with $p \prime \ge p$
+
+\begin{figure}[c]
+\includegraphics[scale=0.45]{hyperloglog_prime_to_p.png}
+\caption{Convert to dense representation}
+\end{figure}
 
 \end{frame}
 
@@ -166,8 +169,7 @@ TODO !
 
 \begin{figure}[c]
 \includegraphics [scale=0.45]  {sparse1.png}
-
-Maximum key/value number ($p' = 25$)
+\caption{Maximum key/value number ($p' = 25$)}
 \end{figure}
 
 \end{frame}
@@ -219,8 +221,7 @@ Maximum key/value number ($p' = 25$)
 
 \begin{figure}[c]
 \includegraphics [scale=0.45]  {sparse123.png}
-
-Maximum key/value number ($p' = 25$)
+\caption{Maximum key/value number ($p' = 25$)}
 \end{figure}
 
 \end{frame}
@@ -273,8 +274,7 @@ Which data can be removed ??
   
 \begin{figure}[c]
 \includegraphics [scale=0.45]  {sparse_all.png}
-
-Maximum key/value number ($p' = 25$)
+\caption{Maximum key/value number ($p' = 25$)}
 \end{figure}
 \end{frame}
 
