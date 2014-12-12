@@ -38,8 +38,8 @@
   \begin{block}{Previous optimizations}
     \begin{itemize}
       \item 64 bits hash
-      \item small cardinalities : linear counting
-      \item no bias ($n < 65000$)
+      \item Linear counting for low cardinalities
+      \item Bias correction ($n < 65000$)
     \end{itemize}
   \end{block}
 
@@ -60,14 +60,14 @@
 \section{Sparse representation}
 \begin{frame}{Why use a sparse representation}
 
-  \begin{block}{HyperLogLog}
+  \begin{alertblock}{HyperLogLog}
     Fixed amount of memory depending on the precision ($6\times m$ bits)
 
     ($\varrho(w)$ : 6 bits)
-  \end{block}
+  \end{alertblock}
 
   \begin{figure}[c]
-    \includegraphics [scale=0.4]  {hyperloglog_buckets.png}
+    \includegraphics [scale=0.33]  {hyperloglog_buckets.png}
   \end{figure}
 
 
@@ -114,7 +114,11 @@
 \begin{frame}{What sparse representation}
 
 
-  \begin{block}{Optimization : bufferize insertions}
+  \begin{alertblock}{Problem : updating the sorted list}
+    Inserting into a sorted array is not efficient
+  \end{alertblock}
+
+  \begin{block}{Solution : bufferize insertions}
     \begin{itemize}
       \item Compact sorted list of key/value integers
       \item Speed up insertions with a set of values to insert
@@ -127,6 +131,20 @@
   \end{block}
 
 \end{frame}
+
+
+\begin{frame}{What sparse representation}
+
+  \begin{block}{Upcoming optimizations}
+    \begin{itemize}
+      \item Higher precision
+      \item Compression
+      \item Encoding hash values
+    \end{itemize}
+  \end{block}
+
+\end{frame}
+
 
 %% ============================
 
@@ -157,25 +175,21 @@
 
 \begin{frame}{Higher precision}
 
+  Sparse representation uses $p \prime$ bits for the index, with $p \prime \ge p$
 
-
-
-Sparse representation uses $p \prime$ bits for the index, with $p \prime \ge p$
-
-\begin{figure}[c]
-\includegraphics[scale=0.45]{hyperloglog_prime_to_p.png}
-\caption{Convert to dense representation}
-\end{figure}
+  \begin{figure}[c]
+    \includegraphics[scale=0.45]{hyperloglog_prime_to_p.png}
+    \caption{Convert to dense representation}
+  \end{figure}
 
 \end{frame}
 
 \begin{frame}{Higher precision}
 
-
-\begin{figure}[c]
-\includegraphics [scale=0.45]  {sparse1.png}
-\caption{Maximum key/value number ($p' = 25$)}
-\end{figure}
+  \begin{figure}[c]
+    \includegraphics [scale=0.45]  {sparse1.png}
+    \caption{Maximum key/value number ($p' = 25$)}
+  \end{figure}
 
 \end{frame}
 
@@ -213,10 +227,11 @@ Sparse representation uses $p \prime$ bits for the index, with $p \prime \ge p$
 
 
 
-\begin{frame}{Difference encoding}
+\begin{frame}{Compressed sparse representation}
 
   \begin{figure}[c]
     \includegraphics [scale=0.5]  {hyperloglog_difference.png}
+    \caption{Difference encoding}
   \end{figure}
 
 
@@ -240,26 +255,24 @@ Sparse representation uses $p \prime$ bits for the index, with $p \prime \ge p$
     Improve storage efficieny by reducing the amount of data to store.
   \end{block}
 
-  \begin{block}{Problem}
+  \begin{alertblock}{Problem}
     Which data can be removed ??
-  \end{block}
+  \end{alertblock}
 
 \end{frame}
 
-
 \begin{frame}{Encoding hash values}
-\begin{figure}[c]
-\includegraphics[scale=0.45]{encoding_hash.png}
-\caption{When is $\varrho(w\prime)$ needed ? ($p' = 11$ and $p = 5$)}
-\end{figure}
+  \begin{figure}[c]
+    \includegraphics[scale=0.4]{encoding_hash.png}
+    \caption{When is $\varrho(w\prime)$ needed ? ($p' = 11$ and $p = 5$)}
+  \end{figure}
 \end{frame}
 
 \begin{frame}{Encoding hash values}
 
-  On average, only 1 every $2^{p-p\prime} $ entries require storing $\varrho(w\prime)$
+  On average, only 1 every $2^{p\prime - p} $ entries require storing $\varrho(w\prime)$
 
-  We need a bigger encoding if we switch to the normal representation
-  and if $\langle x_{63}, \dots, x_{64-p\prime} \rangle$ are all 0.
+  Bigger encoding when $\langle x_{63-p}, \dots, x_{64-p\prime} \rangle$ are all 0:
   ~\\
   \colorbox{light-gray}{$\langle x_{63}, \dots, x_{64-p\prime} \rangle \| \langle \varrho (w\prime) \rangle \| \langle 1 \rangle $}
 
@@ -269,7 +282,7 @@ Sparse representation uses $p \prime$ bits for the index, with $p \prime \ge p$
   \colorbox{light-gray}{$\langle x_{63}, \dots, x_{64-p\prime} \rangle \| \langle 0 \rangle $}
 
   ~\\
-  The gain of space on the hashed values increases precision ($p\prime)$
+  The lower memory footprint on the hash values increases the range of cardinalities for which this representation is used. ($p\prime)$
 
 \end{frame}
 
