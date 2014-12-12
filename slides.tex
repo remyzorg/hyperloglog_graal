@@ -37,7 +37,7 @@
 
   \begin{block}{Previous optimizations}
     \begin{itemize}
-      \item 64 bits hash
+      \item 64-bit hash
       \item Linear counting for low cardinalities
       \item Bias correction ($n < 65000$)
     \end{itemize}
@@ -188,7 +188,7 @@
 
   \begin{figure}[c]
     \includegraphics [scale=0.45]  {sparse1.png}
-    \caption{Maximum key/value number ($p' = 25$)}
+    \caption{Maximum number of key/value pairs ($p' = 25$)}
   \end{figure}
 
 \end{frame}
@@ -241,7 +241,7 @@
 
   \begin{figure}[c]
     \includegraphics [scale=0.45]  {sparse123.png}
-    \caption{Maximum key/value number ($p' = 25$)}
+    \caption{Maximum number of key/value pairs ($p' = 25$)}
   \end{figure}
 
 \end{frame}
@@ -293,7 +293,7 @@
   
   \begin{figure}[c]
     \includegraphics [scale=0.45]  {sparse_all.png}
-    \caption{Maximum key/value number ($p' = 25$)}
+    \caption{Maximum number of key/value pairs ($p' = 25$)}
   \end{figure}
 \end{frame}
 
@@ -303,7 +303,7 @@
 \begin{frame}{Conclusion : Median relative error}
   \begin{figure}[c]
     \includegraphics [scale=0.28]  {hll_fig5.png}
-    \caption{$HLL_{NOBIAS}$ vs $HLL_{++}$}
+    \caption{$HLL_{NOBIAS}$ vs $HLL_{++}$ ($p = 14$, $p' = 25$)}
   \end{figure}
 \end{frame}
 
