@@ -3,7 +3,7 @@
 
 
 all:
-	ocamlbuild -package batteries -package bitv hll.native
+	ocamlbuild -package batteries -package bitv main.native
 
 
 clean:

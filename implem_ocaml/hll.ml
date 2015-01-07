@@ -3,60 +3,47 @@
 
 exception ValueError
 
-open Batteries
 
 
-let logn s n = Float.(
-    (log n) / (log s)
-  )
-
-let (<+) = (lsl)
-let (+>) = (lsr)
-
-let print_bin v  =
-  for i = 31 downto 0 do
-    Printf.printf "%d" (v lsr i land 1)
-  done;
-  print_endline ""
-
-let lsts_n n k = (k <+ n) +> n
-let fsts_n n k = (k <+ n) <+ n
-
-
-let (<+!) x n= x := !x <+ n
-
-
-let clz x =
-  let x = ref x in
-  let n = ref 0 in
-  if !x <= 0x0000ffff then (n <+! 16; x <+! 16);
-  if !x <= 0x00ffffff then (n <+! 8; x <+! 8);
-  if !x <= 0x0fffffff then (n <+! 4; x <+! 4);
-  if !x <= 0x3fffffff then (n <+! 2; x <+! 2);
-  if !x <= 0x7fffffff then incr n;
-  !n
-
-
-
-
-
-module type Data =
+module type Params =
   sig
-    type t
-    val iter : ('a -> unit) -> t -> unit
+    val nlz : int -> int
+    val p : int
+    val a_m : float
   end
 
-module Make = functor (D: Data) -> struct
+module Make = functor (P: Params) -> struct
 
-  let aggregation p set hash =
-    let htbl = Hashtbl.create 1777 in
-    D.iter (fun v ->
-        let x = hash v in
-        let idx = lsts_n p x in
-        let w = fsts_n p x in
-        (* let midx = match Hashtbl.find *)
-        assert false
-    ) set
+  let a = Array.make (1 lsl P.p) 0
+
+  let troll = Array.make 0 false
+
+  let add_item h =
+
+    let idx = Misc.fsts_n P.p h in
+    let w = Misc.lsts_n P.p h in
+    Format.printf "%d %a\n" idx Misc.print_bin idx;
+    (* Format.printf "h: %a\nw  : %a\nl: %a\nidx: %d @\n" Misc.print_bin h Misc.print_bin w Misc.print_bin idx idx; *)
+    a.(idx) <- max a.(idx) (P.nlz w)
+
+  let estimate () =
+
+    (* Array.iter (Format.printf "%d\n") a; *)
+
+    let sum = Array.fold_left (
+        fun acc x -> 2.0 ** (float_of_int (-x)) +. acc
+      ) 0.0 a
+    in
+    let m_2 = (float_of_int (1 lsl (2 * P.p))) in
+    (* Format.printf "%f %f\n" (float_of_int (1 lsl (2 * P.p))) sum; *)
+    P.a_m *. m_2 /. sum
+
+  let count () = estimate ()
+
+
+  let _ =
+    Format.printf "size:%d @\n" (Array.length a)
+
 
 
 end
