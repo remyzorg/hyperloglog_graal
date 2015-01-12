@@ -1,2 +1,3 @@
 SRC .
 PKG batteries
+B _build

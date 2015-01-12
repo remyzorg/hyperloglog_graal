@@ -1,59 +1,55 @@
 
 
 
-exception ValueError
-
-
 
 module type Params =
-  sig
-    val nlz : int -> int
-    val p : int
-    val alpha_m : float
-    val hash_size : int
-  end
+sig
+  val nlz : int -> int
+  val p : int
+  val hash_size : int
+end
 
 module Make = functor (P: Params) -> struct
 
+  open P
+
+  let nlz = Misc.nlz
+  let p = 15
+  let hash_size = 30
+
+
   let word_size = Sys.word_size
 
-  let a = Array.make (1 lsl P.p) 0
+  let m = 1 lsl p
+  let a = Array.make m 0
 
-  let troll = Array.make 0 false
-
-  let first_n = Misc.first_n P.hash_size
-  let last_n = Misc.last_n word_size P.hash_size
-
-  let nlz x = P.nlz x - (P.hash_size - P.p) - (32 - P.hash_size)
+  let alpha_m = match m with
+    | 16 -> 0.673
+    | 32 -> 0.697
+    | 64 -> 0.709
+    | m -> 0.7213 /. 1. +. 1.079 /. float m
 
   let add_item h =
-    let idx = first_n P.p h in
-    let w = last_n P.p h in
-    let qw = nlz w in
-    (* Format.printf "%a %d\n%a %d\n\n" Misc.print_bin h h Misc.print_bin w w; *)
-    (* if idx = 0 then *)
-    (* Format.printf "h: %a\nf  : %a\nl: %a\nidx: %d\nqw: %d \n@\n" Misc.print_bin h Misc.print_bin w Misc.print_bin idx idx qw; *)
-    a.(idx) <- max a.(idx) qw
+    let idx, w = Misc.split hash_size h p in
+    a.(idx) <- max a.(idx) (nlz w - p - 1)
 
-  let estimate () =
-
-    (* Array.iter (Format.printf "%d\n") a; *)
-
-    let sum =
-      Array.fold_left (fun acc x ->
-        2.0 ** (float_of_int ~-x) +. acc
-      ) 0.0 a
+  let count () =
+    let e, v =
+      let sum, v =
+        Array.fold_left (fun (acce, accv) x ->
+            acce +. 1. /. (float (1 lsl x)),
+            if x = 0 then accv + 1 else accv
+          ) (0., 0) a
+      in
+      alpha_m *. (m * m |> float) /. sum, v
     in
+    if e <= 5. *. (float m) /. 2. then
+      if v = 0 then e
 
-    let m_2 = float_of_int @@ 1 lsl (2 * P.p) in
-    (* Format.printf "%f %f\n" (float_of_int (1 lsl (2 * P.p))) sum; *)
+      (* linear counting*)
+      else (float m) *. log ((float m) /. (float v))
 
-    P.alpha_m *. m_2 /. sum
-
-  let count () = estimate ()
-
-
-  let _ =
-    Format.printf "size:%d @\n" (Array.length a)
-
+    else if e < 1. /. 32. *. (2. ** float hash_size) then
+      e
+    else ~-. 2.** 32. *. log (1. -. e /. 2. ** 32.)
 end

@@ -7,16 +7,20 @@ let (+>) = (lsr)
 let print_bin fmt v  =
   for i = 62 downto 0 do
     Format.fprintf fmt "%d" (v lsr i land 1);
-    if i = 30 then Format.fprintf fmt "."
+    if i = 30 then Format.fprintf fmt " ";
+    if i = 15 then Format.fprintf fmt " ";
+
   done
 
 let first_n hs n k = k +> (hs - n)
+
 let last_n ws hs n k = (k <+ ((ws - 1) - n)) +> (ws - 1 - n)
+
+let split size i n = i +> (size - n), ((1 <+ (size - n)) - 1) land i
+
 
 let (<+!) x n= x := !x <+ n
 let (+!) x n = x := !x + n
-
-let a_32 = 0.709
 
 let nlz x =
   if x = 0 then 32 else
