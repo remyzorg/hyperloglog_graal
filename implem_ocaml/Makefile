@@ -7,7 +7,7 @@ all:
 
 clean:
 	ocamlbuild -clean
-	@rm -f test
+	@rm -f test *~
 
 
 test:

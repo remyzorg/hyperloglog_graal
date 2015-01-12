@@ -17,11 +17,9 @@ module Make = functor (P: Params) -> struct
   let p = 15
   let hash_size = 30
 
-
-  let word_size = Sys.word_size
-
   let m = 1 lsl p
-  let a = Array.make m 0
+  let mf = float m
+  let buckets = Array.make m 0
 
   let alpha_m = match m with
     | 16 -> 0.673
@@ -31,7 +29,7 @@ module Make = functor (P: Params) -> struct
 
   let add_item h =
     let idx, w = Misc.split hash_size h p in
-    a.(idx) <- max a.(idx) (nlz w - p - 1)
+    buckets.(idx) <- max buckets.(idx) (nlz w - p - 1)
 
   let count () =
     let e, v =
@@ -39,17 +37,18 @@ module Make = functor (P: Params) -> struct
         Array.fold_left (fun (acce, accv) x ->
             acce +. 1. /. (float (1 lsl x)),
             if x = 0 then accv + 1 else accv
-          ) (0., 0) a
+          ) (0., 0) buckets
       in
-      alpha_m *. (m * m |> float) /. sum, v
+      alpha_m *. mf *. mf /. sum, v
     in
-    if e <= 5. *. (float m) /. 2. then
+    if e <= 5. *. mf /. 2. then
       if v = 0 then e
 
       (* linear counting*)
-      else (float m) *. log ((float m) /. (float v))
+      else mf *. log (mf /. (float v))
 
-    else if e < 1. /. 32. *. (2. ** float hash_size) then
-      e
-    else ~-. 2.** 32. *. log (1. -. e /. 2. ** 32.)
+    else
+      let l32 = float @@ 1 lsl 32 in
+    if e < 1. /. 32. *. l32 then e
+    else ~-. l32 *. log (1. -. e /. l32)
 end
