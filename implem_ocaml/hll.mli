@@ -11,6 +11,6 @@ module Make : functor (P : Params) -> sig
   (** add hashed element to the functor instance global variable (side effect) *)
   val add_item : int -> unit
 
-  (** count the number of different items previously added hyperloglog *)
+  (** count the number of different items previously added with hyperloglog *)
   val count : unit -> float
 end

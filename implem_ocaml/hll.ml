@@ -13,10 +13,6 @@ module Make = functor (P: Params) -> struct
 
   open P
 
-  let nlz = Misc.nlz
-  let p = 15
-  let hash_size = 30
-
   let m = 1 lsl p
   let mf = float m
   let buckets = Array.make m 0
@@ -29,13 +25,15 @@ module Make = functor (P: Params) -> struct
 
   let add_item h =
     let idx, w = Misc.split hash_size h p in
-    buckets.(idx) <- max buckets.(idx) (nlz w - p - 1)
+    buckets.(idx) <- max buckets.(idx) (nlz w - p - (31 - hash_size))
+  (* take account of ocaml int size and size of the hash *)
+
 
   let count () =
     let e, v =
       let sum, v =
         Array.fold_left (fun (acce, accv) x ->
-            acce +. 1. /. (float (1 lsl x)),
+            acce +. 1. /. (float @@ 1 lsl x),
             if x = 0 then accv + 1 else accv
           ) (0., 0) buckets
       in
@@ -44,8 +42,7 @@ module Make = functor (P: Params) -> struct
     if e <= 5. *. mf /. 2. then
       if v = 0 then e
 
-      (* linear counting*)
-      else mf *. log (mf /. (float v))
+      else mf *. log (mf /. (float v)) (* linear counting*)
 
     else
       let l32 = float @@ 1 lsl 32 in
