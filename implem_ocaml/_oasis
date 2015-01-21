@@ -1,0 +1,24 @@
+OASISFormat: 0.4
+Name:        hyperloglog
+Version:     0.01
+Synopsis:    implementation and experimentation for library or language lang
+Authors:     Remy El Sibaïe
+License:     LGPL
+Plugins: META (0.4), DevFiles (0.4)
+BuildTools:  ocamlbuild
+
+
+Library "murmur3_stubs"
+  Path: .
+  Modules: Murmur3
+  CSources: murmur3_stubs.c, murmur3_stubs.h
+  CCOpt: -O2 -D OPTION_PASSED
+
+Executable main
+  Path:       .
+  MainIs:     main.ml
+  CompiledObject: native
+  BuildDepends:
+    ppx_deriving.std,
+    murmur3_stubs,
+    unix

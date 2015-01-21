@@ -1,7 +1,4 @@
 
-
-
-
 module type Params =
 sig
   val nlz : int -> int
@@ -23,13 +20,24 @@ module Make = functor (P: Params) -> struct
     | 64 -> 0.709
     | m -> 0.7213 /. 1. +. 1.079 /. float m
 
-  let add_item h =
-    let idx, w = Misc.split hash_size h p in
-    buckets.(idx) <- max buckets.(idx) (nlz w - p - (31 - hash_size))
+
+  let hashp = hash_size - p
+
+  let add_item h = 
+
+    (* let idx, w = Misc.split hash_size h p in *)
+    let idx = h lsr hashp in
+    let w = ((1 lsl (hashp)) - 1) land h in
+    (* Format.printf "%d\t%d\n" idx (nlz w - p + 1);
+    *)
+    
+    buckets.(idx) <- max buckets.(idx) (nlz w - p + 1)
   (* take account of ocaml int size and size of the hash *)
 
 
   let count () =
+    (*Array.iter (Format.printf "%d\n") buckets;*)
+  
     let e, v =
       let sum, v =
         Array.fold_left (fun (acce, accv) x ->

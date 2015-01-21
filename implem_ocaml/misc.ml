@@ -19,6 +19,10 @@ let print_bin fmt v  =
 (* split an int in two parts : first n bits (shifted to right), lasts size - n bits *)
 let split size i n = i +> (size - n), ((1 <+ (size - n)) - 1) land i
 
+let firsts size i n = i +> (size - n)
+let lasts size i n = ((1 <+ (size - n)) - 1) land i
+
+
 
 (* Number of leading zeros from Hacker's Delight book page
    http://www.hackersdelight.org/hdcodetxt/nlz.c.txt *)

@@ -1,0 +1,2 @@
+
+__builtin_clz
