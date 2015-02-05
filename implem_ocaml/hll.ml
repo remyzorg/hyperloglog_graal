@@ -23,21 +23,33 @@ module Make = functor (P: Params) -> struct
 
   let hashp = hash_size - p
 
-  let add_item h = 
+  let reset () = for i = 0 to m - 1 do Array.set buckets i 0 done
 
-    (* let idx, w = Misc.split hash_size h p in *)
+  let add_item h =
     let idx = h lsr hashp in
     let w = ((1 lsl (hashp)) - 1) land h in
-    (* Format.printf "%d\t%d\n" idx (nlz w - p + 1);
-    *)
-    
     buckets.(idx) <- max buckets.(idx) (nlz w - p + 1)
   (* take account of ocaml int size and size of the hash *)
 
 
+(*
+  let count2 () =
+  let fd = (open_in "afewresult")
+  let rec step () =
+    match input_line fd with
+    | exception End_of_file -> []
+    | l -> let card = read_int in
+           ignore input_char;
+           let
+           :: step ()
+  in
+
+  step ()
+*)
+
   let count () =
     (*Array.iter (Format.printf "%d\n") buckets;*)
-  
+
     let e, v =
       let sum, v =
         Array.fold_left (fun (acce, accv) x ->
