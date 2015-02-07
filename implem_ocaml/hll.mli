@@ -13,4 +13,6 @@ module Make : functor (P : Params) -> sig
 
   (** count the number of different items previously added with hyperloglog *)
   val count : unit -> float
+
+  val reset : unit -> unit
 end

@@ -35,19 +35,15 @@ let benchmark_hash ah  =
 
 let benchmark () =
   Random.init 67;
-  let ah = Array.init 10000000 
+  let ah = Array.init 10000000
     (fun n -> Murmur3.hash (string_of_int (Random.int(1000000000)))) in
    (* Array.iter (Format.printf "%d\n") ah; *)
   let v = benchmark_hash ah in
   Format.printf "%f@\n" ( BenchHll.count() );
   v
 
-let gen_data card = 
+let gen_data card =
   Array.init card (fun n -> Murmur3.hash (string_of_int (Random.int(1000000000))))
-
-
-
-
 
 let benchmark_old () =
   (*37 nanoseconde avec laptop sous batteries*)
@@ -57,15 +53,18 @@ let benchmark_old () =
   done;
   Unix.gettimeofday () -. beginning
 
-let experiments pallier maxcard = 
+let experiments pallier maxcard =
+  Random.init 67;
   let n = maxcard/pallier in
   (*pour toutes les cardinalité de pallier en pallier*)
   for i = 1 to n do
     let card = (i*pallier) in
-    let res = Array.init 1000 
+
+    let res = Array.init 1000
       (fun _ ->
         (* génere #card données, et estime leur cardinalité *)
         let ah = gen_data card in
+        BenchHll.reset();
         Array.iter BenchHll.add_item ah;
         BenchHll.count()
       )
@@ -76,7 +75,8 @@ let experiments pallier maxcard =
      let med_est = res.(499) in
      let pct01_est = res.(9) in
      let pct99_est = res.(989) in
-     Format.printf "%d\t%f\t%f\t%f\t%f\n" card moy_est med_est pct01_est pct99_est
+     Format.printf "%d\t%f\t%f\t%f\t%f\n" card moy_est med_est pct01_est pct99_est;
+     Format.print_flush ()
   done
   
 let () =
