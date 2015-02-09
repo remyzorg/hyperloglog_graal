@@ -1,4 +1,20 @@
 
+open Batteries
+
+
+
+
+let input_bench fd =
+  let lr = ref [] in
+  let rec step () =
+    match input_line fd with
+    | exception End_of_file -> !lr
+    | line ->
+      let c = Scanf.sscanf line "%d\t%f\t%s\t%s\t%s" (fun s1 s2 _ _ _ -> s1, s2 ) in
+      lr := c :: !lr; step ()
+  in step ()
+     |> List.rev
+     |> Array.of_list
 
 
 
@@ -6,8 +22,11 @@ module Params = struct
   let nlz = Murmur3.clz64
   let p = 14
   let hash_size = 63 (* 63 Hashtbl.hash doesn't give values over (2^31 - 1) *)
+  let bench_array =
+    let c = open_in "bench.txt"  in
+    let a = input_bench c in
+    close_in c; a
 end
-
 
 module MyHll = Hll.Make (Params)
 
@@ -17,6 +36,16 @@ let input fd =
     | exception End_of_file -> MyHll.count ()
     | l -> MyHll.add_item (Murmur3.hash l); step ()
   in step ()
+
+
+
+
+
+(* let () = *)
+(*   let fd = open_in "bench.txt" in *)
+(*   List.iter (fun (a, b) -> Format.printf "%d\t%f@\n" a b) @@ input_bench fd; *)
+(*   close_in fd *)
+
 
 
 module BenchHll = Hll.Make(Params)
@@ -82,8 +111,9 @@ let experiments pallier maxcard =
 
 open Sorted_hash_table
 
-let () =
-     experiments 500 100000;
-     (* Format.printf "%f@\n" (input stdin) ; *)
 
-     (*Format.printf "%f@\n" (benchmark ())*)
+let () =
+  experiments 500 100000;
+  (* Format.printf "%f@\n" (input stdin) ; *)
+
+  (* Format.printf "%f@\n" (benchmark ()) *)
