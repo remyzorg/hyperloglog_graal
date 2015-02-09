@@ -109,6 +109,23 @@ percent we observe a pike at $2.5\%$ decreasing quickly from $40000$.
    \caption{\label{figerr}Relative error average}
 \end{figure}
 
+Using the results of this experiment, we corrected the estimation algorithm. It removed the small bump at 40000 in the average estimation, as shown in figure \ref{figmoycorr}. We have also plotted the relative error (figure \ref{figmoyerr}), and the relative error of the first and last centil (figure \ref{figdataerr}). The algorithm is still perturbated at 40000, but now the extreme behavior is slightly better than the previous average case !
+
+\begin{figure}[h!]
+   \includegraphics[scale=1]{./moy_corr.png}
+   \caption{\label{figmoycorr}Relative error average}
+\end{figure}
+
+\begin{figure}[h!]
+   \includegraphics[scale=1]{./moy_err.png}
+   \caption{\label{figmoyerr}Relative error average}
+\end{figure}
+
+\begin{figure}[h!]
+   \includegraphics[scale=0.8]{./data_corr.png}
+   \caption{\label{figdataerr}Relative error average}
+\end{figure}
+
 
 \subsection{Optimizations}
 
