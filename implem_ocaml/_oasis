@@ -21,4 +21,5 @@ Executable main
   BuildDepends:
     ppx_deriving.std,
     murmur3_stubs,
-    unix
+    unix,
+    batteries

@@ -4,6 +4,7 @@ sig
   val nlz : int -> int
   val p : int
   val hash_size : int
+  val bench_array : (int * float) array
 end
 
 module Make : functor (P : Params) -> sig

@@ -36,3 +36,19 @@ let nlz x =
     if !x <= 0x3fffffff then (n +! 2; x <+! 2);
     if !x <= 0x7fffffff then incr n;
     !n
+
+
+let dicho_search t f =
+  let rec step i j =
+    if i = j + 1 || i = j then i, j
+    else
+      let mid = (i + j / 2) in
+      if f >= snd t.(mid) then
+        step mid j
+      else step i mid
+  in step 0 (Array.length t / 2)
+
+let linear_interpolation t (i, j) f =
+  let inti, fli = t.(i) in
+  let intj, flj = t.(i) in
+  float inti +. (float @@ intj - inti) *. ((f -. fli) /. (flj -. fli))

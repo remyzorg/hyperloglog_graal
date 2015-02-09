@@ -4,6 +4,7 @@ sig
   val nlz : int -> int
   val p : int
   val hash_size : int
+  val bench_array : (int * float) array
 end
 
 module Make = functor (P: Params) -> struct
@@ -13,6 +14,9 @@ module Make = functor (P: Params) -> struct
   let m = 1 lsl p
   let mf = float m
   let buckets = Array.make m 0
+
+
+  let t = P.bench_array
 
   let alpha_m = match m with
     | 16 -> 0.673
@@ -68,4 +72,9 @@ module Make = functor (P: Params) -> struct
       let l32 = float @@ 1 lsl 32 in
     if e < 1. /. 32. *. l32 then e
     else ~-. l32 *. log (1. -. e /. l32)
+
+  let count_with_interpolation () =
+    let f = count () in
+    Misc.(linear_interpolation t (dicho_search t f) f)
+
 end
